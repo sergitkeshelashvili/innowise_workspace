@@ -1,0 +1,17 @@
+# Mini ETL Tool
+
+Python-based ETL (Extract, Transform, Load) tool that processes student and room data using PostgreSQL.
+
+## Features
+- **OOP & SOLID**: Built with modular classes for Database, Loading, Querying, and Exporting.
+- **Pure SQL**: No ORM used, as per requirements.
+- **Database-Level Math**: All calculations (AVG age, Age difference, Counts) are performed by the PostgreSQL engine.
+- **Optimization**: Includes B-Tree indexing on frequently queried columns (`room_id`, `sex`, `birthday`).
+- **Flexible Export**: Supports both JSON and XML formats.
+
+## Setup
+1. Clone the repository.
+2. Create and activate a virtual environment:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate

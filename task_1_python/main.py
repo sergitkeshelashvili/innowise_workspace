@@ -168,7 +168,7 @@ class Exporter:
 
 ### Main Logic: Defines and parses command-line arguments for database configuration, input data paths, and output settings
 def main():
-    parser = argparse.ArgumentParser(description="Mini ETL")
+    parser = argparse.ArgumentParser(description="Mini ETL Tool")
     parser.add_argument("--students", required=True, help="Path to students.json")
     parser.add_argument("--rooms", required=True, help="Path to rooms.json")
     parser.add_argument("--format", choices=["json", "xml"], default="json", help="Output format")

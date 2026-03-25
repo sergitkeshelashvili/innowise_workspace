@@ -1,4 +1,4 @@
-# Mini ETL Tool
+### **Mini ETL Tool**
 
 Python-based ETL (Extract, Transform, Load) tool that processes student and room data using PostgreSQL.
 

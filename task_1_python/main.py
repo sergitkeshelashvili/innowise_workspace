@@ -166,9 +166,9 @@ class Exporter:
         tree.write(path, encoding="utf-8", xml_declaration=True)
 
 
-### Main Logic
+### Main Logic: Defines and parses command-line arguments for database configuration, input data paths, and output settings
 def main():
-    parser = argparse.ArgumentParser(description="University Data ETL Tool")
+    parser = argparse.ArgumentParser(description="Mini ETL")
     parser.add_argument("--students", required=True, help="Path to students.json")
     parser.add_argument("--rooms", required=True, help="Path to rooms.json")
     parser.add_argument("--format", choices=["json", "xml"], default="json", help="Output format")

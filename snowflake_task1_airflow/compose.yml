@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: airflow-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  airflow-webserver:
+    build: .
+    image: custom-airflow-assignment:latest
+    container_name: airflow-webserver
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8085:8080"
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
+      _AIRFLOW_WWW_USER_USERNAME: admin
+      _AIRFLOW_WWW_USER_PASSWORD: admin
+      _AIRFLOW_WWW_USER_ROLE: Admin
+      _AIRFLOW_WWW_USER_EMAIL: admin@example.com
+      _PIP_ADDITIONAL_REQUIREMENTS: "snowflake-connector-python snowflake-sqlalchemy apache-airflow-providers-snowflake"
+    volumes:
+      - /home/sergi/Desktop/snowflake_airflow/dags:/opt/airflow/dags
+      - /home/sergi/Desktop/snowflake_airflow/data:/opt/airflow/data
+      - /home/sergi/Desktop/snowflake_airflow/logs:/opt/airflow/logs
+    command: bash -c "airflow db migrate && airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com || true && airflow webserver"
+
+  airflow-scheduler:
+    build: .
+    image: custom-airflow-assignment:latest
+    container_name: airflow-scheduler
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      _PIP_ADDITIONAL_REQUIREMENTS: "snowflake-connector-python snowflake-sqlalchemy apache-airflow-providers-snowflake"
+    volumes:
+      - /home/sergi/Desktop/snowflake_airflow/dags:/opt/airflow/dags
+      - /home/sergi/Desktop/snowflake_airflow/data:/opt/airflow/data
+      - /home/sergi/Desktop/snowflake_airflow/logs:/opt/airflow/logs
+    command: airflow scheduler
